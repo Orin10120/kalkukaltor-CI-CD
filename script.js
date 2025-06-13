@@ -1,3 +1,4 @@
+
 const display = document.getElementById('display');
 
 function appendToDisplay(value) {
@@ -22,13 +23,14 @@ function deleteLast() {
 
 function performCalculation(expression) {
     try {
-        // Perhatian: Penggunaan 'new Function' bisa berisiko jika input tidak aman.
+        // Peringatan: Penggunaan 'new Function' bisa berisiko jika input tidak aman.
         // Untuk kalkulator sederhana ini, ini adalah pendekatan umum.
         // Solusi yang lebih aman akan melibatkan parser ekspresi matematika.
-        const result = new Function(`return ${expression}`)();
-
-        // Tangani kasus pembagian dengan nol atau hasil non-numerik
-        return isNaN(result) || !isFinite(result) ? 'Error' : result;
+        const result = new Function('return ' + expression)();
+        if (isNaN(result) || !isFinite(result)) {
+            return 'Error'; // Tangani pembagian dengan nol atau hasil non-numerik
+        }
+        return result;
     } catch (error) {
         console.error('Calculation Error:', error);
         return 'Error';
@@ -39,8 +41,8 @@ function calculateResult() {
     if (display.value === '' || display.value === 'Error') {
         return;
     }
-
-    display.value = performCalculation(display.value);
+    const result = performCalculation(display.value);
+    display.value = result;
 }
 
 // Ekspor fungsi untuk pengujian jika menggunakan modul Node.js (opsional untuk setup sederhana ini)
